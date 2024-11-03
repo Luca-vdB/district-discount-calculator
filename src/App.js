@@ -139,6 +139,10 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    document.body.style.zoom = "120%";
+  }, []);
+
   return (
     <div>
       <center>
