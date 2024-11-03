@@ -17,6 +17,8 @@ function App() {
     "Preserve",
     "Diplomatic Quarter",
   ];
+  const govPlazaIndex = 9;
+  const diploQuarterIndex = 12;
 
   const icons = districts.map(district => {
     const iconName = district.replace(/\s+/g, "_") + "_(Civ6).webp";
@@ -37,19 +39,31 @@ function App() {
     Array(districts.length).fill(false)
   );
 
-  
+  const [totalDistrictsUnlocked, setTotalDistrictsUnlocked] = useState(0);
+  const [totalDistrictsCompleted, setTotalDistrictsCompleted] = useState(0);
+
+
   useEffect(() => {
     const A = unlockedDistricts.filter(Boolean).length; //Number of unlocked districts
     const B = completedDistricts.reduce((accumulator, currentValue) => accumulator + currentValue, 0); //number of completed districts
-    console.log(A, B);
     
     const cond1 = B >= A;
     const updatedDiscountStatus = placedDistricts.map((C, index) => {
       const condition2 = C < B / A;
-      return cond1 && condition2;
+      return cond1 && condition2 && unlockedDistricts[index];
     });
     setDiscountStatus(updatedDiscountStatus);
   },[unlockedDistricts, placedDistricts, completedDistricts]);
+
+  useEffect(() => {
+    setTotalDistrictsUnlocked(unlockedDistricts.filter(Boolean).length)
+  },[unlockedDistricts]);
+
+  useEffect(() => {
+    setTotalDistrictsCompleted(completedDistricts.reduce((accumulator, currentValue) => accumulator + currentValue, 0));
+  },[completedDistricts]);
+
+
 
   const handleUnlockChange = (index) => {
     const updatedUnlockedDistricts = [...unlockedDistricts];
@@ -72,16 +86,29 @@ function App() {
       handleUnlockChange(index);
     }
     const updatePlacedDistricts = [...placedDistricts];
+
+    if ((index == govPlazaIndex || index == diploQuarterIndex) && updatePlacedDistricts[index] == 1) {
+      return;
+    }
+
     updatePlacedDistricts[index] += 1;
     setPlacedDistricts(updatePlacedDistricts);
+    
   };
 
   const decrementPlacedDistricts = (index) => {
-    const updatePlacedDistricts = [...placedDistricts];
     if (placedDistricts[index] > 0) {
+      const updatePlacedDistricts = [...placedDistricts];
       updatePlacedDistricts[index] -= 1;
+
+      const updatedCompleteDistricts = [...completedDistricts];
+      if (updatedCompleteDistricts[index] > updatePlacedDistricts[index]){
+        updatedCompleteDistricts[index] -= 1;
+        setCompletedDistricts(updatedCompleteDistricts);
+      }
       setPlacedDistricts(updatePlacedDistricts)
     }
+    
   };
 
   const incrementCompletedDistricts = (index) => {
@@ -89,7 +116,13 @@ function App() {
       handleUnlockChange(index);
     }
     const updatedCompleteDistricts = [...completedDistricts];
+
+    if ((index == govPlazaIndex || index == diploQuarterIndex) && updatedCompleteDistricts[index] == 1) {
+      return; 
+    }
+
     updatedCompleteDistricts[index] += 1;
+
     if (updatedCompleteDistricts[index] > placedDistricts[index]){
       const updatePlacedDistricts = [...placedDistricts];
       updatePlacedDistricts[index] += 1;
@@ -97,6 +130,7 @@ function App() {
     }
     setCompletedDistricts(updatedCompleteDistricts);
   };
+
   const decrementCompletedDistricts = (index) => {
     const updatedCompleteDistricts = [...completedDistricts];
     if (completedDistricts[index] > 0) {
@@ -104,7 +138,6 @@ function App() {
       setCompletedDistricts(updatedCompleteDistricts);
     }
   };
-  
 
   return (
     <div>
@@ -160,6 +193,7 @@ function App() {
         </td>
         </tr>
       ))}
+      {/*Also add a reset button, add formula with current values of A,B*/}
       </tbody>
       </table>
       </center>
