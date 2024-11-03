@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/district-discount-calculator/static/css/main.74724dd1.css",
+    "main.js": "/district-discount-calculator/static/js/main.59a95e86.js",
+    "static/js/453.4ac32e1d.chunk.js": "/district-discount-calculator/static/js/453.4ac32e1d.chunk.js",
+    "index.html": "/district-discount-calculator/index.html",
+    "main.74724dd1.css.map": "/district-discount-calculator/static/css/main.74724dd1.css.map",
+    "main.59a95e86.js.map": "/district-discount-calculator/static/js/main.59a95e86.js.map",
+    "453.4ac32e1d.chunk.js.map": "/district-discount-calculator/static/js/453.4ac32e1d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.74724dd1.css",
+    "static/js/main.59a95e86.js"
+  ]
+}
